@@ -1,38 +1,40 @@
-pipeline{
+pipeline {
 	
 	agent any
 	
-	tools{
+	tools {
 		maven 'Maven'
-		jdk 'JDK17'
+		jdk 'JDK21'
 	}
 	
-	stages{
+	stages {
 		
-		stage('Checkout'){
-			steps{
-				git branch : 'main',
-				url : 'https://github.com/ashishsoni17/jenkins-project'
+		stage('Checkout') {
+			steps {
+				git branch: 'main',
+				    url: 'https://github.com/ashishsoni17/jenkins-project'
 			}
 		}
 		
-		
-        stage('Build') {
-            steps {
-                bat 'mvn clean compile'
-            }         
-        }
+		stage('Build') {
+			steps {
+				bat 'mvn clean compile'
+			}         
+		}
 
-        stage('Run JUnit Tests') {
-            steps {
-                bat 'mvn test'
-            }
-        }
+		stage('Run JUnit Tests') {
+			steps {
+				bat 'mvn test'
+			}
+		}
 
-       stage('SonarQube Analysis') {
-          steps {
-          withSonarQubeEnv('SonarServer') {
-            bat 'mvn clean verify sonar:sonar'
-        }
+		stage('SonarQube Analysis') {
+			steps {
+				withSonarQubeEnv('SonarServer') {
+					bat 'mvn clean verify sonar:sonar'
+				}
+			}
+		}
+
 	}
 }
